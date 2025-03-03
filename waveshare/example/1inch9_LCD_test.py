@@ -82,7 +82,7 @@ try:
     
     logging.info("show image")
     ImagePath = ["../pic/LCD_1inch9_1.jpg", "../pic/LCD_1inch9_2.jpg", "../pic/LCD_1inch9_3.jpg", "../pic/LCD_1inch9_4.jpg"]
-    for i in range(0, 3):
+    for i in range(0, len(ImagePath)):
         image = Image.open(ImagePath[i])	
         # image = image.rotate(0)
         disp.ShowImage(image)
