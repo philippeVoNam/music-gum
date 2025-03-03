@@ -26,3 +26,5 @@ name of file : wifi-powersave-off.conf
 # Values are 0 (use default), 1 (ignore/don't touch), 2 (disable) or 3 (enable).
 [connection]
 wifi.powersave = 2
+
+# THE ONLY THING THAT YOU NEED TODO IS THAT YOU NEED TO RESTART NETWORK MANAGER ON BOOT EVERYTIME
