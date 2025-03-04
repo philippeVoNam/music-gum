@@ -12,7 +12,7 @@ SECRET = os.getenv("secret")
 
 sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=ID,
                                                client_secret=SECRET,
-                                               redirect_uri="http://localhost:8888/callback",
+                                               redirect_uri="http://127.0.0.1:8000/callback",
                                                scope="user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-modify user-library-read"))
 
 cmd = ""

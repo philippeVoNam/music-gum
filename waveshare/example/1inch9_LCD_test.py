@@ -28,7 +28,7 @@ try:
     # Clear display.
     disp.clear()
     #Set the backlight to 100
-    disp.bl_DutyCycle(50)
+    disp.bl_DutyCycle(100)
 
     Font1 = ImageFont.truetype("../Font/Font01.ttf", 25)
     Font2 = ImageFont.truetype("../Font/Font01.ttf", 35)
