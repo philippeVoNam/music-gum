@@ -53,3 +53,16 @@ while cmd != "q":
                 smallestImage = image
 
         download_image(image["url"], "example.png")
+
+# LCD
+# Raspberry Pi pin configuration:
+disp = LCD_1inch9.LCD_1inch9()
+disp.Init()
+disp.clear()
+disp.bl_DutyCycle(100)
+image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
+draw = ImageDraw.Draw(image1)
+image = Image.open("example.png")
+# image = image.rotate(0)
+disp.ShowImage(image)
+disp.module_exit()
