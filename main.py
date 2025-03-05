@@ -47,13 +47,27 @@ download_image(images[0]["url"], "example.png")
 disp = LCD_1inch9.LCD_1inch9()
 disp.Init()
 disp.bl_DutyCycle(100)
-while True:
+cmd = ""
+while cmd != "q":
     size = input("size : ")
     x = int(input("x : "))
     y = int(input("y : "))
+    cmd = input("cmd : ")
     disp.clear()
     image = Image.open("example.png")
     image = image.resize((170, int(size)))
     image = image.rotate(270)
     disp.ShowImage(image, x, y)
+
+while cmd != "q":
+    size = input("size : ")
+    a = int(input("a : "))
+    b = int(input("b : "))
+    c = int(input("c : "))
+    d = int(input("d : "))
+    cmd = input("cmd : ")
+    image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
+    draw = ImageDraw.Draw(image1)
+    draw.rectangle((a, b, c, d), fill = "BLACK")
+
 disp.module_exit()
