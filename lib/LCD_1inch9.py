@@ -134,10 +134,11 @@ class LCD_1inch9(lcdconfig.RaspberryPi):
             self.data((Yend - 1) & 0xff )
             self.command(0x2C)
 
-    def ShowImage(self, Image):
+    def ShowImage(self, Image, x, y):
         """Set buffer to value of Python Imaging Library image."""
         """Write display buffer to physical display"""
         imwidth, imheight = Image.size
+        print(Image.size)
         if imwidth == self.height and imheight ==  self.width:
             img = self.np.asarray(Image)
             pix = self.np.zeros((self.width, self.height,2), dtype = self.np.uint8)
@@ -148,7 +149,7 @@ class LCD_1inch9(lcdconfig.RaspberryPi):
             
             self.command(0x36)
             self.data(0x70) 
-            self.SetWindows(0, 0, self.height,self.width, 1)
+            self.SetWindows(x, y, self.height,self.width, 1)
             self.digital_write(self.DC_PIN,True)
             for i in range(0,len(pix),4096):
                 self.spi_writebyte(pix[i:i+4096])
@@ -162,7 +163,7 @@ class LCD_1inch9(lcdconfig.RaspberryPi):
             
             self.command(0x36)
             self.data(0x00) 
-            self.SetWindows(0, 0, self.width, self.height)
+            self.SetWindows(x, y, self.width, self.height)
             self.digital_write(self.DC_PIN,True)
         for i in range(0, len(pix), 4096):
             self.spi_writebyte(pix[i: i+4096])

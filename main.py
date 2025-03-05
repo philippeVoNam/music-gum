@@ -36,33 +36,24 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=ID,
                                                redirect_uri="http://localhost:8888/callback",
                                                scope="user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-modify user-library-read"))
 
-cmd = ""
-while cmd != "q":
-    cmd = input("cmd : ")
-    if cmd == "l":
-        sp.next_track()
-    elif cmd == "h":
-        sp.previous_track()
-    elif cmd == "p":
-        current_track = sp.current_playback()
-        pprint(current_track["item"]["name"])
-        images = current_track["item"]["album"]["images"]
-        smallestImage = images[0]
-        for image in images:
-            if image["height"]  < smallestImage["height"]:
-                smallestImage = image
+current_track = sp.current_playback()
+pprint(current_track["item"]["name"])
+images = current_track["item"]["album"]["images"]
+download_image(images[0]["url"], "example.png")
 
-        download_image(image["url"], "example.png")
 
 # LCD
 # Raspberry Pi pin configuration:
 disp = LCD_1inch9.LCD_1inch9()
 disp.Init()
-disp.clear()
 disp.bl_DutyCycle(100)
-image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
-draw = ImageDraw.Draw(image1)
-image = Image.open("example.png")
-# image = image.rotate(0)
-disp.ShowImage(image)
+while True:
+    size = input("size : ")
+    x = int(input("x : "))
+    y = int(input("y : "))
+    disp.clear()
+    image = Image.open("example.png")
+    image = image.resize((170, int(size)))
+    image = image.rotate(270)
+    disp.ShowImage(image, x, y)
 disp.module_exit()
