@@ -48,26 +48,28 @@ disp = LCD_1inch9.LCD_1inch9()
 disp.Init()
 disp.bl_DutyCycle(100)
 cmd = ""
-while cmd != "q":
-    size = input("size : ")
-    x = int(input("x : "))
-    y = int(input("y : "))
-    cmd = input("cmd : ")
-    disp.clear()
-    image = Image.open("example.png")
-    image = image.resize((170, int(size)))
-    image = image.rotate(270)
-    disp.ShowImage(image, x, y)
+disp.clear()
+image = Image.open("example.png")
+image = image.resize((170, 170))
+image = image.rotate(270)
+disp.ShowImage(image, 0, 0)
 
-while cmd != "q":
-    size = input("size : ")
-    a = int(input("a : "))
-    b = int(input("b : "))
-    c = int(input("c : "))
-    d = int(input("d : "))
-    cmd = input("cmd : ")
-    image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
-    draw = ImageDraw.Draw(image1)
-    draw.rectangle((a, b, c, d), fill = "BLACK")
+image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
+image1.paste(image, (0,0))
+draw = ImageDraw.Draw(image1)
+
+Font1 = ImageFont.truetype("Font/Font01.ttf", 25)
+draw.text((100, 180), 'Hello world', fill = "RED", font=Font1)
+
+while True:
+    current_track = sp.current_playback()
+    percentComplete = int(current_track["progress_ms"] / current_track["item"]["duration_ms"] * 100)
+    a = 50
+    b = 180
+    c = 60
+    d = 180 + (percentComplete * 180 / 100)
+    draw.rectangle((a, b, c, d), fill = "BLACK", width = 10)
+    disp.ShowImage(image1, 0, 0)
+    time.sleep(0.1)
 
 disp.module_exit()
