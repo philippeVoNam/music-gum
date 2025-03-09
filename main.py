@@ -26,6 +26,7 @@ def download_image(url, file_name):
     except Exception as e:
         print(f"An error occurred: {e}")
 
+
 load_dotenv()
 
 ID = os.getenv("id")
@@ -42,6 +43,7 @@ images = current_track["item"]["album"]["images"]
 download_image(images[0]["url"], "example.png")
 
 
+
 # LCD
 # Raspberry Pi pin configuration:
 disp = LCD_1inch9.LCD_1inch9()
@@ -50,26 +52,39 @@ disp.bl_DutyCycle(100)
 cmd = ""
 disp.clear()
 image = Image.open("example.png")
-image = image.resize((170, 170))
-image = image.rotate(270)
-disp.ShowImage(image, 0, 0)
+image = image.resize((150, 150))
+image = image.rotate(-90)
 
-image1 = Image.new("RGB", (disp.width,disp.height ), "WHITE")
-image1.paste(image, (0,0))
-draw = ImageDraw.Draw(image1)
+masterImage = Image.new("RGB", (disp.width,disp.height), (255, 250, 225))
 
-Font1 = ImageFont.truetype("Font/Font01.ttf", 25)
-draw.text((100, 180), 'Hello world', fill = "RED", font=Font1)
+infoImage = Image.new("RGB", (150, 150), (255, 250, 225))
+draw = ImageDraw.Draw(infoImage)
+Font1 = ImageFont.truetype("Font/Roboto-Regular.ttf", 10.5)
+
+masterImage.paste(image, (10,10))
+
+name = current_track["item"]["name"]
+name = name[:15] # fit on the screen
+volume = str(current_track["device"]["volume_percent"])
+draw.text((15, 50), name, fill = (105, 103, 97), font=Font1)
+draw.text((130, 50), volume, fill = (105, 103, 97), font=Font1)
+draw.rectangle((15, 70, 142, 80), fill = (237, 232, 209), width = 1)
+infoImage = infoImage.rotate(-90)
+draw = ImageDraw.Draw(infoImage)
 
 while True:
     current_track = sp.current_playback()
     percentComplete = int(current_track["progress_ms"] / current_track["item"]["duration_ms"] * 100)
-    a = 50
-    b = 180
-    c = 60
-    d = 180 + (percentComplete * 180 / 100)
-    draw.rectangle((a, b, c, d), fill = "BLACK", width = 10)
-    disp.ShowImage(image1, 0, 0)
+    progress = str(round(current_track["progress_ms"]/1000, 2))
+    a = 70
+    b = 15
+    c = 80
+    d = 15 + (percentComplete * 142 / 100)
+    draw.rectangle((a, b, c, d), fill = (105, 103, 97), width = 1)
+    masterImage.paste(infoImage, (0,160))
+
+    #draw.text((10, 240), progress, fill = (105, 103, 97), font=Font1)
+    disp.ShowImage(masterImage, 0, 0)
     time.sleep(0.1)
 
 disp.module_exit()
